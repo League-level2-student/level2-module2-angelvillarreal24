@@ -24,6 +24,10 @@ class Segment {
 Segment head;
 int foodX;
 int foodY;
+int direction = RIGHT;
+int segmentCounter = 0;
+int headX = ((int)random(50)*10);
+int headY = ((int)random(50)*10);
 
 
 
@@ -35,7 +39,7 @@ int foodY;
 
 void setup() {
   size(500, 500);
-  head = new Segment(1, 1);
+  head = new Segment(headX, headY);
   frameRate(20);
   dropFood();
 }
@@ -104,10 +108,10 @@ void keyPressed() {
 void move() {
   //Change the location of the Snake head based on the direction it is moving.
 
-  /*
+  
   switch(direction) {
    case UP:
-   // move head up here 
+     headY = headY + 10;
    break;
    case DOWN:
    // move head down here 
@@ -119,7 +123,7 @@ void move() {
    // mystery code goes here 
    break;
    }
-   */
+   
 }
 
 void checkBoundaries() {
