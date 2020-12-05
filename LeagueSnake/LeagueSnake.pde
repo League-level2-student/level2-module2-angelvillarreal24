@@ -47,6 +47,7 @@ void setup() {
 void dropFood() {
   //Set the food in a new random location
   foodX = ((int)random(50)*10);
+  foodY = ((int)random(50)*10);
 }
 
 
@@ -58,8 +59,10 @@ void dropFood() {
 
 void draw() {
   background(#4D4C4C);
+  move();
   drawFood();
   drawSnake();
+  eat();
 }
 
 void drawFood() {
@@ -72,7 +75,7 @@ void drawFood() {
 void drawSnake() {
   //Draw the head of the snake followed by its tail
   fill(#FF1216);
-  rect(0,0,10,10);
+  rect(headX, headY, 10, 10);
 }
 
 
@@ -103,35 +106,65 @@ void checkTailCollision() {
 
 void keyPressed() {
   //Set the direction of the snake according to the arrow keys pressed
+  if (key == CODED) {
+    if (keyCode == UP && direction!=DOWN){
+        direction = UP;
+    }
+    else if (keyCode == DOWN && direction!=UP){
+        direction = DOWN;
+    }
+    else if (keyCode == LEFT && direction!=RIGHT){
+        direction = LEFT;
+    }
+    else if (keyCode == RIGHT && direction!=LEFT){
+        direction = RIGHT;
+    }
+  }
 }
 
 void move() {
   //Change the location of the Snake head based on the direction it is moving.
 
-  
+
   switch(direction) {
-   case UP:
-     headY = headY + 10;
-   break;
-   case DOWN:
-   // move head down here 
-   break;
-   case LEFT:
-   // figure it out 
-   break;
-   case RIGHT:
-   // mystery code goes here 
-   break;
-   }
-   
+  case UP:
+    headY = headY - 10;
+    break;
+  case DOWN:
+    headY = headY + 10;
+    break;
+  case LEFT:
+    headX = headX - 10; 
+    break;
+  case RIGHT:
+    headX = headX + 10;
+    break;
+  }
+  checkBoundaries();
 }
 
 void checkBoundaries() {
   //If the snake leaves the frame, make it reappear on the other side
+  if (headX>=width) {
+    headX=0;
+  } else if (headX<=-1) {
+    headX=width;
+  }
+  if (headY>=height) {
+    headY=0;
+  } else if (headY<=-1) {
+    headY=height;
+  }
 }
 
 
 
 void eat() {
   //When the snake eats the food, its tail should grow and more food appear
+  if(headX == foodX && headY == foodY){
+    segmentCounter++;
+    print("food");
+      foodX = ((int)random(50)*10);
+      foodY = ((int)random(50)*10);
+  }
 }
