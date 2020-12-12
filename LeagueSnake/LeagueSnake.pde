@@ -22,13 +22,14 @@ class Segment {
 // All the game variables that will be shared by the game methods are here
 //*
 Segment head;
+Segment tailStart;
 int foodX;
 int foodY;
 int direction = RIGHT;
 int segmentCounter = 0;
 int headX = ((int)random(50)*10);
 int headY = ((int)random(50)*10);
-
+ArrayList<Segment> segments = new ArrayList<Segment>();
 
 
 
@@ -86,15 +87,32 @@ void drawSnake() {
 
 void drawTail() {
   //Draw each segment of the tail
+  for (Segment mySegment : segments) {
+    rect(mySegment.segmentX, mySegment.segmentY, 10, 10);
+    
+  }
 }
 
 void manageTail() {
   //After drawing the tail, add a new segment at the "start" of the tail and remove the one at the "end" 
   //This produces the illusion of the snake tail moving.
+  checkTailCollision();
+  drawTail();
+  tailStart = new Segment(headX, headY);
+  segments.add(tailStart);
+  segments.remove(0);
 }
 
 void checkTailCollision() {
   //If the snake crosses its own tail, shrink the tail back to one segment
+  for(Segment segundoSegment : segments){
+    if(segundoSegment.segmentX == headX && segundoSegment.segmentY == headY){
+      segmentCounter = 1;
+      segments = new ArrayList<Segment>();
+      
+      
+    }
+  }
 }
 
 
