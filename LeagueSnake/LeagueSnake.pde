@@ -23,6 +23,7 @@ class Segment {
 //*
 Segment head;
 Segment tailStart;
+Segment tail;
 int foodX;
 int foodY;
 int direction = RIGHT;
@@ -77,6 +78,7 @@ void drawSnake() {
   //Draw the head of the snake followed by its tail
   fill(#FF1216);
   rect(headX, headY, 10, 10);
+  manageTail();
 }
 
 
@@ -89,7 +91,6 @@ void drawTail() {
   //Draw each segment of the tail
   for (Segment mySegment : segments) {
     rect(mySegment.segmentX, mySegment.segmentY, 10, 10);
-    
   }
 }
 
@@ -105,12 +106,11 @@ void manageTail() {
 
 void checkTailCollision() {
   //If the snake crosses its own tail, shrink the tail back to one segment
-  for(Segment segundoSegment : segments){
-    if(segundoSegment.segmentX == headX && segundoSegment.segmentY == headY){
+  for (Segment segundoSegment : segments) {
+    if (segundoSegment.segmentX == headX && segundoSegment.segmentY == headY) {
       segmentCounter = 1;
       segments = new ArrayList<Segment>();
-      
-      
+      tailStart = new Segment(headX, headY);
     }
   }
 }
@@ -125,17 +125,14 @@ void checkTailCollision() {
 void keyPressed() {
   //Set the direction of the snake according to the arrow keys pressed
   if (key == CODED) {
-    if (keyCode == UP && direction!=DOWN){
-        direction = UP;
-    }
-    else if (keyCode == DOWN && direction!=UP){
-        direction = DOWN;
-    }
-    else if (keyCode == LEFT && direction!=RIGHT){
-        direction = LEFT;
-    }
-    else if (keyCode == RIGHT && direction!=LEFT){
-        direction = RIGHT;
+    if (keyCode == UP && direction!=DOWN) {
+      direction = UP;
+    } else if (keyCode == DOWN && direction!=UP) {
+      direction = DOWN;
+    } else if (keyCode == LEFT && direction!=RIGHT) {
+      direction = LEFT;
+    } else if (keyCode == RIGHT && direction!=LEFT) {
+      direction = RIGHT;
     }
   }
 }
@@ -179,10 +176,11 @@ void checkBoundaries() {
 
 void eat() {
   //When the snake eats the food, its tail should grow and more food appear
-  if(headX == foodX && headY == foodY){
+  if (headX == foodX && headY == foodY) {
     segmentCounter++;
-    print("food");
-      foodX = ((int)random(50)*10);
-      foodY = ((int)random(50)*10);
+    foodX = ((int)random(50)*10);
+    foodY = ((int)random(50)*10);
+    tailStart = new Segment(headX, headY);
+    segments.add(tailStart);
   }
 }
